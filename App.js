@@ -19,24 +19,25 @@ import {
 
 function App() {
   const [input, setInput] = useState('');
-  const [list, setList] = useState([{title: 'oneitem', id: 'todo-oneitem'}]);
+  const [list, setList] = useState({'todo-oneitem': {title: 'oneitem', id: 'todo-oneitem'}});
   const [darkModeEnabled, toggleDarkMode] = useState(false);
 
-  const handleAddItem = () => {
+  const handleAddItem = () => { //"Each todo title to be unique"
     //Assuming duplicates are allowed and not adjusting for punctuation
-    const newList = {
+    const newList = { ...list };
+    const newItemID = input.toLowerCase().replaceAll(' ', '-');
+    newList[newItemID] = {
       title: input,
       id: input.toLowerCase().replaceAll(' ', '-'),
     };
-    console.log(input, newList, [...list, newList]);
-    setList([...list, newList]);
+    
+    setList(newList);
     setInput('');
   };
 
   const handleRemoveItem = item => {
-    const removedIndex = list.indexOf(item);
-    const newList = [...list];
-    newList.splice(removedIndex, 1);
+    const newList = {...list};
+    delete newList[item.id];
     setList(newList);
   };
 
@@ -46,6 +47,16 @@ function App() {
       key={item.id}
       onPress={() => handleRemoveItem(item)}>
       <Text>{item.title}</Text>
+    </TouchableOpacity>
+  );
+
+  const AddButton = () => (
+    <TouchableOpacity
+      disabled={input.length === 0}
+      testID="add-button-id"
+      onPress={handleAddItem}
+      style={styles.button}>
+      <Text>Add</Text>
     </TouchableOpacity>
   );
 
@@ -66,15 +77,9 @@ function App() {
           onChangeText={setInput}
           style={{borderWidth: 1}}
         />
-        <TouchableOpacity
-          disabled={input.length === 0}
-          testID="add-button-id"
-          onPress={handleAddItem}
-          style={styles.button}>
-          <Text>Add</Text>
-        </TouchableOpacity>
+        <AddButton />
         <ScrollView>
-          {list.map(item => ToDo(item))}
+          {Object.keys(list).map(item => ToDo(list[item]))}
         </ScrollView>
       </SafeAreaView>
     </View>
