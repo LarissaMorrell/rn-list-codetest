@@ -18,9 +18,15 @@ import {
   View,
 } from 'react-native';
 
+const initialList = {
+  'entry-sensor': {title: 'Entry Sensor', id: 'entry-sensor'},
+  'motion-sensor': {title: 'Motion Sensor', id: 'motion-sensor'},
+  'glassbreak-sensor': {title: 'Glassbreak Sensor', id: 'glassbreak-sensor'},
+}
+
 function App() {
   const [input, setInput] = useState('');
-  const [list, setList] = useState({'todo-oneitem': {title: 'oneitem', id: 'todo-oneitem'}});
+  const [list, setList] = useState({...initialList});
   const [darkModeEnabled, toggleDarkMode] = useState(false);
 
   const handleAddItem = () => { //"Each todo title to be unique"
@@ -61,17 +67,19 @@ function App() {
     <TouchableOpacity
       testID="todo-id"
       key={item.id}
-      onPress={() => handleRemoveItem(item)}>
+      onPress={() => handleRemoveItem(item)}
+      style={styles.listItemContainer}>
       <Text>{item.title}</Text>
     </TouchableOpacity>
   );
 
+  const disabledButton = {...styles.button, ...styles.disabledButton};
   const AddButton = () => (
     <TouchableOpacity
       disabled={input.length === 0}
       testID="add-button-id"
       onPress={handleAddItem}
-      style={styles.button}>
+      style={input.length === 0 ? disabledButton : styles.button}>
       <Text>Add</Text>
     </TouchableOpacity>
   );
@@ -81,7 +89,7 @@ function App() {
       disabled={Object.keys(list).length === 0}
       testID="remove-button-id"
       onPress={onRemoveAllPress}
-      style={styles.button}>
+      style={Object.keys(list).length === 0 ? disabledButton : styles.button}>
       <Text>Remove All</Text>
     </TouchableOpacity>
   );
@@ -91,12 +99,15 @@ function App() {
       testID="wrapper-id"
       style={{backgroundColor: darkModeEnabled ? '#888' : '#fff'}}>
       <SafeAreaView>
-        <Switch
-          trackColor={{false: '#767577', true: '#f79e00'}}
-          ios_backgroundColor="#0f2544"
-          onValueChange={toggleDarkMode}
-          value={darkModeEnabled}
-        />
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.welcomeText}>SimpliSafe Cart</Text>
+          <Switch
+            trackColor={{false: '#767577', true: '#f79e00'}}
+            ios_backgroundColor="#0f2544"
+            onValueChange={toggleDarkMode}
+            value={darkModeEnabled}
+          />
+        </View>
         <View style={styles.inputContainer}>
           <TextInput
             testID="input-id"
@@ -126,14 +137,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 5,
   },
+  disabledButton: {
+    backgroundColor: '#f5c878',
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 10,
     marginHorizontal: 20,
-
   },
   input: {
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderRadius: 5,
     padding: 8,
@@ -142,6 +156,24 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 20,
   },
+  listItemContainer: {
+    backgroundColor: '#f1f1f2',
+    borderRadius: 5,
+    marginVertical: 5,
+    marginHorizontal: 20,
+    padding: 10,
+  },
+  welcomeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+    marginHorizontal: 20,
+  },
+  welcomeText: {
+    fontSize: 30,
+    fontWeight: '500',
+    color: '#0f2544',
+  }
 });
 
 export default App;
