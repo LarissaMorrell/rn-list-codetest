@@ -7,6 +7,7 @@
 
 import React, {useState} from 'react';
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -41,6 +42,21 @@ function App() {
     setList(newList);
   };
 
+  const handleRemoveAllItems = () => {
+    setList({});
+  };
+
+  const onRemoveAllPress = () => {
+    Alert.alert('Remove all', 'Are you sure you want to remove all items in your list?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Remove Items', onPress: handleRemoveAllItems, style: 'destructive'},
+    ]);
+  }
+
   const ToDo = item => (
     <TouchableOpacity
       testID="todo-id"
@@ -60,6 +76,16 @@ function App() {
     </TouchableOpacity>
   );
 
+  const RemoveAllButton = () => (
+    <TouchableOpacity
+      disabled={Object.keys(list).length === 0}
+      testID="remove-button-id"
+      onPress={onRemoveAllPress}
+      style={styles.button}>
+      <Text>Remove All</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View
       testID="wrapper-id"
@@ -71,13 +97,18 @@ function App() {
           onValueChange={toggleDarkMode}
           value={darkModeEnabled}
         />
-        <TextInput
-          testID="input-id"
-          value={input}
-          onChangeText={setInput}
-          style={{borderWidth: 1}}
-        />
-        <AddButton />
+        <View style={styles.inputContainer}>
+          <TextInput
+            testID="input-id"
+            value={input}
+            onChangeText={setInput}
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <AddButton />
+          <RemoveAllButton />
+        </View>
         <ScrollView>
           {Object.keys(list).map(item => ToDo(list[item]))}
         </ScrollView>
