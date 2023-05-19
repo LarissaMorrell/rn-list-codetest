@@ -1,6 +1,6 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Larissa Morrell
+ * Code Challenge for SimpliSafe
  *
  * @format
  */
@@ -29,8 +29,7 @@ function App() {
   const [list, setList] = useState({...initialList});
   const [darkModeEnabled, toggleDarkMode] = useState(false);
 
-  const handleAddItem = () => { //"Each todo title to be unique"
-    //Assuming duplicates are allowed and not adjusting for punctuation
+  const handleAddItem = () => { //Not adjusting for punctuation
     const newList = { ...list };
     const newItemID = input.toLowerCase().replaceAll(' ', '-');
     newList[newItemID] = {
