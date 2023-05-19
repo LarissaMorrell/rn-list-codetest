@@ -92,8 +92,8 @@ function App() {
       style={{backgroundColor: darkModeEnabled ? '#888' : '#fff'}}>
       <SafeAreaView>
         <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          ios_backgroundColor="#3e3e3e"
+          trackColor={{false: '#767577', true: '#f79e00'}}
+          ios_backgroundColor="#0f2544"
           onValueChange={toggleDarkMode}
           value={darkModeEnabled}
         />
@@ -121,9 +121,26 @@ const styles = StyleSheet.create({
   button: {
     width: 100,
     paddingVertical: 5,
-    backgroundColor: '#81b0ff',
+    backgroundColor: '#f79e00',
     alignItems: 'center',
     alignSelf: 'center',
+    borderRadius: 5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+    marginHorizontal: 20,
+
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 8,
+  },
+  inputContainer: {
+    marginVertical: 10,
+    marginHorizontal: 20,
   },
 });
 
